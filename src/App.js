@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 //import logo from './logo.svg';
 // import './App.css';
+
+const StyledAppContainer = styled.div`
+  text-align: center;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div >
-         <h2 style={{textAlign: 'center'}}>Meme Bingo Card Generator</h2>
-      </div>
+      <StyledAppContainer>
+         <h2>Meme Bingo Card Generator</h2>
+      </StyledAppContainer>
     );
   }
 }
