@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-//import logo from './logo.svg';
-// import './App.css';
+import { BingoCard } from './BingoCard';
 
 const StyledAppContainer = styled.div`
   text-align: center;
@@ -13,7 +12,8 @@ class App extends Component {
     this.state = {
       selectedMemeCategory: 'programmerHumor',
       displayNextOptions: false,
-      bingoCardSize: '',
+      displayBingoCard: false,
+      bingoCardSize: '3x3',
       memeStorage: {},
       usedMemes: {}
     };
@@ -78,13 +78,14 @@ fetchMemes() {
       newUsedMemes[newRandomMeme[0].link] = newRandomMeme[0];
     }
     this.setState(prevState => ({
+      displayBingoCard: true,
       memeStorage: {
         ...prevState.memeStorage,
         [this.state.selectedMemeCategory]: memeArray
       },
       usedMemes: {
         ...prevState.usedMemes,
-        ...newUsedMemes
+        [this.state.selectedMemeCategory]: newUsedMemes
       }
     }));
   }
@@ -123,6 +124,11 @@ fetchMemes() {
                 <button onClick={this.fetchMemes}>Lemme see the memes you made for me fam!</button>
               </div>
            </div>
+           : null}
+           {this.state.displayBingoCard ?
+             <div>
+               <BingoCard memes={this.state.usedMemes[this.state.selectedMemeCategory]}></BingoCard>
+             </div>
            : null}
       </StyledAppContainer>
     );
