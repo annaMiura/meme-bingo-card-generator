@@ -7,6 +7,11 @@ mongoose.connect(`mongodb+srv://meme-bingo-master:${process.env.MONGO_PASSWORD}@
 
 const data = seedData.data;
 
+Model.programmerMemesModel.insertMany(data.ProgrammerHumor, (err, docs) => {
+  if (err) console.log(err);
+  else console.log('programmer memes memes done son!', docs.length);
+});
+
 Model.dndMemesModel.insertMany(data.dndmemes, (err, docs) => {
   if (err) console.log(err);
   else console.log('dnd memes done son!', docs);

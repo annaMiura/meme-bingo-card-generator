@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = require('./schemas.js');
 
+const programmerMemesModel = mongoose.model('programmerMemes', Schema.programmerHumor);
+
 const dndMemesModel = mongoose.model('dndmemes', Schema.dndmemes);
 
 const overwatchMemesModel = mongoose.model('Overwatch_Memes', Schema.Overwatch_Memes);
@@ -22,6 +24,7 @@ const lolCatsMemesModel = mongoose.model('lolcats', Schema.lolcats);
 const dankMemesModel = mongoose.model('dankmemes', Schema.dankmemes);
 
 module.exports = {
+  programmerMemesModel,
   dndMemesModel,
   overwatchMemesModel,
   wholesomeMemesModel,
