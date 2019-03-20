@@ -15,10 +15,13 @@ class App extends Component {
       displayNextOptions: false,
       bingoCardSize: '',
       memeStorage: {},
+      usedMemes: {}
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
     this.displayNextOptions = this.displayNextOptions.bind(this);
     this.selectBingoCardSize = this.selectBingoCardSize.bind(this);
+    this.fetchMemes = this.fetchMemes.bind(this);
+    this.getRandomIndex = this.getRandomIndex.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
   }
 
@@ -33,12 +36,8 @@ class App extends Component {
   selectBingoCardSize(e) {
     this.setState({bingoCardSize: e.target.value});
   }
-generateBingoCard() {
-  /*
-  1) grab the desired memes from db
-  2) pass them and grid size to new bingo card component
-  3) display bingo card component underneath the selections
-  */
+
+fetchMemes() {
   fetch(`/${this.state.selectedMemeCategory}`, {
       method: 'GET',
       mode: 'cors'
@@ -53,11 +52,55 @@ generateBingoCard() {
           [this.state.selectedMemeCategory]: memeArray
         }
       }))
+      this.generateBingoCard();
     })
     .catch(error => {
       console.error('something went wrong fetching the desired memes', error);
     })
-}
+  }
+
+  getRandomIndex(maxNum) {
+    return Math.floor(Math.random() * Math.floor(maxNum));
+  }
+
+  generateBingoCard() {
+    /*
+    1) look at the desired bingo card dimensions to find out how many memes to grab
+    2) randomly grab how ever many memes are needed to fill the card
+    3) modify the state so they're taken out of the state tree and maybe store in a different state variable
+    4) send the generated memes to different bingo card component
+    */
+    let amountOfMemesToGrab;
+    switch (this.state.bingoCardSize) {
+      case '3x3':
+        amountOfMemesToGrab = 9;
+        break;
+      case '4x4':
+        amountOfMemesToGrab = 16;
+        break;
+      default:
+        amountOfMemesToGrab = 9;
+        break;
+    }
+    while (amountOfMemesToGrab > 0) {
+      const memeArray = this.state.memeStorage[this.state.selectedMemeCategory].slice();
+      const randomIndex = this.getRandomIndex(memeArray.length);
+      const newRandomMeme = memeArray.splice(randomIndex, 1);
+      const randomMeme = newRandomMeme[0];
+      this.setState(prevState => ({
+        memeStorage: {
+          ...prevState.memeStorage,
+          [this.state.selectedMemeCategory]: memeArray
+        },
+        usedMemes: {
+          ...prevState.usedMemes,
+          [randomMeme.link]: randomMeme
+        }
+      }));
+       amountOfMemesToGrab--;
+    }
+  }
+
   render() {
     console.log(this.state);
     return (
@@ -89,7 +132,7 @@ generateBingoCard() {
                 <option value="4x4">4x4</option>
               </select>
               <div>
-                <button onClick={this.generateBingoCard}>Lemme see the memes you made for me fam!</button>
+                <button onClick={this.fetchMemes}>Lemme see the memes you made for me fam!</button>
               </div>
            </div>
            : null}
