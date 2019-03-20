@@ -18,7 +18,7 @@ app.get('/programmerHumor', (req, res) => {
       return res.send(memeArray);
     })
     .catch(error => {
-      console.error('something went wrong grabbing dnd memes', error);
+      console.error('something went wrong grabbing programmer memes', error);
     });
 });
 
