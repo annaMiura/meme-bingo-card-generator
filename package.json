@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "node-start": "nodemon server/index.js localhost 3000"
+    "node-start": "nodemon server/index.js localhost 3000",
+    "db-seed": "node ./database/seed.js"
   },
   "eslintConfig": {
     "extends": "react-app"
