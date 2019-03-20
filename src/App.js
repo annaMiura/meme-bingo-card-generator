@@ -65,16 +65,10 @@ fetchMemes() {
 
   generateBingoCard() {
     let amountOfMemesToGrab;
-    switch (this.state.bingoCardSize) {
-      case '3x3':
-        amountOfMemesToGrab = 9;
-        break;
-      case '4x4':
-        amountOfMemesToGrab = 16;
-        break;
-      default:
-        amountOfMemesToGrab = 9;
-        break;
+    if (this.state.bingoCardSize === '3x3') {
+      amountOfMemesToGrab = 9;
+    } else if (this.state.bingoCardSize === '4x4') {
+      amountOfMemesToGrab = 16;
     }
     const memeArray = this.state.memeStorage[this.state.selectedMemeCategory].slice();
     const newUsedMemes = {};
@@ -90,7 +84,7 @@ fetchMemes() {
       },
       usedMemes: {
         ...prevState.usedMemes,
-        newUsedMemes
+        ...newUsedMemes
       }
     }));
   }
