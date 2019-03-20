@@ -1,5 +1,14 @@
 const mongoose = require('mongoose');
 
+const programmerHumor = new mongoose.Schema({
+  id: String,
+  title: String,
+  link: String,
+  score: Number,
+  views: Number,
+  nsfw: Boolean
+})
+
 const dndmemes = new mongoose.Schema({
   id: String,
   title: String,
@@ -91,6 +100,7 @@ const dankmemes = new mongoose.Schema({
 });
 
 module.exports = {
+  programmerHumor,
   dndmemes,
   Overwatch_Memes,
   wholesomememes,

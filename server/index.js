@@ -12,8 +12,18 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.urlencoded({ extended: false }))
 
+app.get('/programmerHumor', (req, res) => {
+  return db.grabMemes('programmerMemesModel')
+    .then(memeArray => {
+      return res.send(memeArray);
+    })
+    .catch(error => {
+      console.error('something went wrong grabbing dnd memes', error);
+    });
+});
+
 app.get('/dndmemes', (req, res) => {
-  return db.grabMemes('dndMemesModel')
+  return db.grabMemes('programmerMemesModel')
     .then(memeArray => {
       return res.send(memeArray);
     })
@@ -103,8 +113,8 @@ app.get('/dankmemes', (req, res) => {
 });
 
 app.get('/dbSeedData', (req, res) => {
-  const subRedditMemeList = ['Overwatch_Memes', 'dndmemes', 'wholesomememes', 'SequelMemes', 'prequelmemes', 'lotrmemes', 'animemes', 'historymemes', 'lolcats', 'dankmemes'];
-  seedFunctions.seedMemes(subRedditMemeList)
+  const subRedditMemeList = ['ProgrammerHumor', 'Overwatch_Memes', 'dndmemes', 'wholesomememes', 'SequelMemes', 'prequelmemes', 'lotrmemes', 'animemes', 'historymemes', 'lolcats', 'dankmemes'];
+  seedFunctions.seedMemes(['ProgrammerHumor'])
     .then(memeObject => {
       return res.send(memeObject);
     })
@@ -112,7 +122,5 @@ app.get('/dbSeedData', (req, res) => {
       console.error('something went wrong with fetching memes', err);
     })
 });
-
-
 
 app.listen(port, console.log('listening on port ' + port));
