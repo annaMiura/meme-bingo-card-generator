@@ -23,7 +23,7 @@ app.get('/programmerHumor', (req, res) => {
 });
 
 app.get('/dndmemes', (req, res) => {
-  return db.grabMemes('programmerMemesModel')
+  return db.grabMemes('dndMemesModel')
     .then(memeArray => {
       return res.send(memeArray);
     })
