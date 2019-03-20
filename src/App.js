@@ -64,12 +64,6 @@ fetchMemes() {
   }
 
   generateBingoCard() {
-    /*
-    1) look at the desired bingo card dimensions to find out how many memes to grab
-    2) randomly grab how ever many memes are needed to fill the card
-    3) modify the state so they're taken out of the state tree and maybe store in a different state variable
-    4) send the generated memes to different bingo card component
-    */
     let amountOfMemesToGrab;
     switch (this.state.bingoCardSize) {
       case '3x3':
@@ -82,23 +76,23 @@ fetchMemes() {
         amountOfMemesToGrab = 9;
         break;
     }
-    while (amountOfMemesToGrab > 0) {
-      const memeArray = this.state.memeStorage[this.state.selectedMemeCategory].slice();
+    const memeArray = this.state.memeStorage[this.state.selectedMemeCategory].slice();
+    const newUsedMemes = {};
+    for (let i = 0; i < amountOfMemesToGrab; i++) {
       const randomIndex = this.getRandomIndex(memeArray.length);
       const newRandomMeme = memeArray.splice(randomIndex, 1);
-      const randomMeme = newRandomMeme[0];
-      this.setState(prevState => ({
-        memeStorage: {
-          ...prevState.memeStorage,
-          [this.state.selectedMemeCategory]: memeArray
-        },
-        usedMemes: {
-          ...prevState.usedMemes,
-          [randomMeme.link]: randomMeme
-        }
-      }));
-       amountOfMemesToGrab--;
+      newUsedMemes[newRandomMeme[0].link] = newRandomMeme[0];
     }
+    this.setState(prevState => ({
+      memeStorage: {
+        ...prevState.memeStorage,
+        [this.state.selectedMemeCategory]: memeArray
+      },
+      usedMemes: {
+        ...prevState.usedMemes,
+        newUsedMemes
+      }
+    }));
   }
 
   render() {
