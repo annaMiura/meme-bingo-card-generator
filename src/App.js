@@ -8,12 +8,46 @@ const StyledAppContainer = styled.div`
 `;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedMemeCategory: '',
+      displayNextOptions: false,
+      bingoCardSize: '',
+    };
+    this.selectMemeCategory = this.selectMemeCategory.bind(this);
+    this.displayNextOptions = this.displayNextOptions.bind(this);
+    this.selectBingoCardSize = this.selectBingoCardSize.bind(this);
+    this.generateBingoCard = this.generateBingoCard.bind(this);
+  }
+
+  selectMemeCategory(e) {
+    this.setState({selectedMemeCategory: e.target.value});
+  }
+
+  displayNextOptions() {
+    this.setState({displayNextOptions: true});
+  }
+
+  selectBingoCardSize(e) {
+    this.setState({bingoCardSize: e.target.value});
+  }
+
+  generateBingoCard(e) {
+    /*
+    1) grab the desired memes from db
+    2) pass them and grid size to new bingo card component
+    3) display bingo card component underneath the selections
+    */
+  }
   render() {
+    console.log(this.state);
     return (
       <StyledAppContainer>
          <h2>Meme Bingo Card Generator</h2>
          <div>Select a meme category:</div>
-         <select>
+        <div>
+         <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.selectedMemeCategory}>
            <option value="programmerHumor">Programming</option>
            <option value="dndmemes">Dungeons and Dragons</option>
            <option value="Overwatch_Memes">Overwatch</option>
@@ -25,6 +59,22 @@ class App extends Component {
            <option value="lolcats">Cats</option>
            <option value="dankmemes">Dank</option>
          </select>
+        </div>
+         <div>
+           <button onClick={this.displayNextOptions}>Lock in meme category</button>
+         </div>
+         {this.state.displayNextOptions ?
+           <div>
+              <span>Select grid size</span>
+              <select onChange={(e) => this.selectBingoCardSize(e)} value={this.state.bingoCardSize}>
+                <option value="3x3">3x3</option>
+                <option value="4x4">4x4</option>
+              </select>
+              <div>
+                <button onClick={(e) => this.generateBingoCard(e)}>Lemme see the memes you made for me fam!</button>
+              </div>
+           </div>
+           : null}
       </StyledAppContainer>
     );
   }
