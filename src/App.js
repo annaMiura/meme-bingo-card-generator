@@ -11,9 +11,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedMemeCategory: '',
+      selectedMemeCategory: 'programmerHumor',
       displayNextOptions: false,
       bingoCardSize: '',
+      memeStorage: {},
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
     this.displayNextOptions = this.displayNextOptions.bind(this);
@@ -32,14 +33,31 @@ class App extends Component {
   selectBingoCardSize(e) {
     this.setState({bingoCardSize: e.target.value});
   }
-
-  generateBingoCard(e) {
-    /*
-    1) grab the desired memes from db
-    2) pass them and grid size to new bingo card component
-    3) display bingo card component underneath the selections
-    */
-  }
+generateBingoCard() {
+  /*
+  1) grab the desired memes from db
+  2) pass them and grid size to new bingo card component
+  3) display bingo card component underneath the selections
+  */
+  fetch(`/${this.state.selectedMemeCategory}`, {
+      method: 'GET',
+      mode: 'cors'
+    })
+    .then(response => {
+      return response.json();
+    })
+    .then(memeArray => {
+      this.setState(prevState => ({
+        memeStorage: {
+          ...prevState.memeStorage,
+          [this.state.selectedMemeCategory]: memeArray
+        }
+      }))
+    })
+    .catch(error => {
+      console.error('something went wrong fetching the desired memes', error);
+    })
+}
   render() {
     console.log(this.state);
     return (
@@ -71,7 +89,7 @@ class App extends Component {
                 <option value="4x4">4x4</option>
               </select>
               <div>
-                <button onClick={(e) => this.generateBingoCard(e)}>Lemme see the memes you made for me fam!</button>
+                <button onClick={this.generateBingoCard}>Lemme see the memes you made for me fam!</button>
               </div>
            </div>
            : null}
