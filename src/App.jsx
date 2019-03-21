@@ -10,7 +10,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedMemeCategory: 'programmerHumor',
+      currentMemeCategory: 'programmerHumor',
+      previousMemeCategory: '',
       displayBingoCard: false,
       bingoCardSize: '3x3',
       memeStorage: {},
@@ -18,39 +19,57 @@ class App extends Component {
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
     this.selectBingoCardSize = this.selectBingoCardSize.bind(this);
+    this.getMemes = this.getMemes.bind(this);
     this.fetchMemes = this.fetchMemes.bind(this);
+    this.extractRandomMemes = this.extractRandomMemes.bind(this);
     this.getRandomIndex = this.getRandomIndex.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
   }
 
   selectMemeCategory(e) {
-    this.setState({selectedMemeCategory: e.target.value});
+    const newMemeCategory = e.target.value;
+    this.setState(prevState => ({
+      previousMemeCategory: prevState.currentMemeCategory,
+      currentMemeCategory: newMemeCategory
+    }))
   }
 
   selectBingoCardSize(e) {
     this.setState({bingoCardSize: e.target.value});
   }
 
-fetchMemes() {
-  fetch(`/${this.state.selectedMemeCategory}`, {
-      method: 'GET',
-      mode: 'cors'
-    })
-    .then(response => {
-      return response.json();
-    })
-    .then(memeArray => {
-      this.setState(prevState => ({
-        memeStorage: {
-          ...prevState.memeStorage,
-          [this.state.selectedMemeCategory]: memeArray
-        }
-      }))
-      this.generateBingoCard();
-    })
-    .catch(error => {
-      console.error('something went wrong fetching the desired memes', error);
-    })
+  getMemes() {
+    if (this.state.memeStorage[this.state.currentMemeCategory]) {
+      this.extractRandomMemes()
+    } else {
+      this.fetchMemes();
+    }
+  }
+
+  fetchMemes() {
+    fetch(`/${this.state.currentMemeCategory}`, {
+        method: 'GET',
+        mode: 'cors'
+      })
+      .then(response => {
+        return response.json();
+      })
+      .then(memeArray => {
+        this.setState(prevState => ({
+          memeStorage: {
+            ...prevState.memeStorage,
+            [this.state.currentMemeCategory]: memeArray
+          }
+        }))
+        this.generateBingoCard();
+      })
+      .catch(error => {
+        console.error('something went wrong fetching the desired memes', error);
+      })
+  }
+
+  extractRandomMemes() {
+    console.log('to do!')
   }
 
   getRandomIndex(maxNum) {
@@ -64,7 +83,7 @@ fetchMemes() {
     } else if (this.state.bingoCardSize === '4x4') {
       amountOfMemesToGrab = 16;
     }
-    const memeArray = this.state.memeStorage[this.state.selectedMemeCategory].slice();
+    const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
     const newUsedMemes = {};
     for (let i = 0; i < amountOfMemesToGrab; i++) {
       const randomIndex = this.getRandomIndex(memeArray.length);
@@ -75,27 +94,25 @@ fetchMemes() {
       displayBingoCard: true,
       memeStorage: {
         ...prevState.memeStorage,
-        [this.state.selectedMemeCategory]: memeArray
+        [this.state.currentMemeCategory]: memeArray
       },
       usedMemes: {
         ...prevState.usedMemes,
-        [this.state.selectedMemeCategory]: newUsedMemes
+        [this.state.currentMemeCategory]: newUsedMemes
       }
     }));
   }
 
   render() {
     console.log(this.state);
-    const activeMemeCategories = Object.keys(this.state.memeStorage);
-    const alreadyFetchedAndRandomizedMemes = this.state.usedMemes[this.state.selectedMemeCategory]
-    const memesNotFetchedYetUsedMemesArrayIndex = activeMemeCategories.length > 1 ? activeMemeCategories.length - 2 : 0;
-    const currentMemeList = alreadyFetchedAndRandomizedMemes ? alreadyFetchedAndRandomizedMemes : this.state.usedMemes[activeMemeCategories[memesNotFetchedYetUsedMemesArrayIndex]];
+    const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory]
+    const memesToUse = fetchedMemes ? fetchedMemes : this.state.usedMemes[this.state.previousMemeCategory]
     return (
       <StyledAppContainer>
         <h2>Meme Bingo Card Generator</h2>
         <span>Select a meme category:</span>
         <span>
-          <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.selectedMemeCategory}>
+          <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.currentMemeCategory}>
             <option value="programmerHumor">Programming</option>
             <option value="dndmemes">Dungeons and Dragons</option>
             <option value="Overwatch_Memes">Overwatch</option>
@@ -116,13 +133,13 @@ fetchMemes() {
           </select>
         </span>
         <div>
-            <button onClick={this.fetchMemes}>
+            <button onClick={this.getMemes}>
               {this.state.displayBingoCard ? 'Update Sample Bingo Card' : 'Show Sample Bingo Card'}
             </button>
         </div>
         {this.state.displayBingoCard ?
           <div>
-            <BingoCard cardSize={this.state.bingoCardSize} memes={currentMemeList}></BingoCard>
+            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse}></BingoCard>
           </div>
           : null}
       </StyledAppContainer>
