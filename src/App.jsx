@@ -11,14 +11,12 @@ class App extends Component {
     super(props);
     this.state = {
       selectedMemeCategory: 'programmerHumor',
-      displayNextOptions: false,
       displayBingoCard: false,
       bingoCardSize: '3x3',
       memeStorage: {},
       usedMemes: {}
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
-    this.displayNextOptions = this.displayNextOptions.bind(this);
     this.selectBingoCardSize = this.selectBingoCardSize.bind(this);
     this.fetchMemes = this.fetchMemes.bind(this);
     this.getRandomIndex = this.getRandomIndex.bind(this);
@@ -27,10 +25,6 @@ class App extends Component {
 
   selectMemeCategory(e) {
     this.setState({selectedMemeCategory: e.target.value});
-  }
-
-  displayNextOptions() {
-    this.setState({displayNextOptions: true});
   }
 
   selectBingoCardSize(e) {
@@ -92,47 +86,79 @@ fetchMemes() {
 
   render() {
     console.log(this.state);
+    const activeMemeCategories = Object.keys(this.state.memeStorage);
+    const alreadyFetchedAndRandomizedMemes = this.state.usedMemes[this.state.selectedMemeCategory]
+    const memesNotFetchedYetUsedMemesArrayIndex = activeMemeCategories.length > 1 ? activeMemeCategories.length - 2 : 0;
+    const currentMemeList = alreadyFetchedAndRandomizedMemes ? alreadyFetchedAndRandomizedMemes : this.state.usedMemes[activeMemeCategories[memesNotFetchedYetUsedMemesArrayIndex]];
     return (
       <StyledAppContainer>
-         <h2>Meme Bingo Card Generator</h2>
-         <div>Select a meme category:</div>
+        <h2>Meme Bingo Card Generator</h2>
+        <span>Select a meme category:</span>
+        <span>
+          <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.selectedMemeCategory}>
+            <option value="programmerHumor">Programming</option>
+            <option value="dndmemes">Dungeons and Dragons</option>
+            <option value="Overwatch_Memes">Overwatch</option>
+            <option value="wholesomememes">Wholesome</option>
+            <option value="prequelmemes">Star Wars Prequels</option>
+            <option value="SequelMemes">Star Wars Sequels</option>
+            <option value="lotrmemes">Lord of the Rings</option>
+            <option value="historymemes">History</option>
+            <option value="lolcats">Cats</option>
+            <option value="dankmemes">Dank</option>
+          </select>
+        </span>
+        <span>
+          <span>Select grid size</span>
+          <select onChange={(e) => this.selectBingoCardSize(e)} value={this.state.bingoCardSize}>
+            <option value="3x3">3x3</option>
+            <option value="4x4">4x4</option>
+          </select>
+        </span>
         <div>
-         <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.selectedMemeCategory}>
-           <option value="programmerHumor">Programming</option>
-           <option value="dndmemes">Dungeons and Dragons</option>
-           <option value="Overwatch_Memes">Overwatch</option>
-           <option value="wholesomememes">Wholesome</option>
-           <option value="prequelmemes">Star Wars Prequels</option>
-           <option value="SequelMemes">Star Wars Sequels</option>
-           <option value="lotrmemes">Lord of the Rings</option>
-           <option value="historymemes">History</option>
-           <option value="lolcats">Cats</option>
-           <option value="dankmemes">Dank</option>
-         </select>
+            <button onClick={this.fetchMemes}>
+              {this.state.displayBingoCard ? 'Update Sample Bingo Card' : 'Show Sample Bingo Card'}
+            </button>
         </div>
-         <div>
-           <button onClick={this.displayNextOptions}>Lock in meme category</button>
-         </div>
-         {this.state.displayNextOptions ?
-           <div>
-              <span>Select grid size</span>
-              <select onChange={(e) => this.selectBingoCardSize(e)} value={this.state.bingoCardSize}>
-                <option value="3x3">3x3</option>
-                <option value="4x4">4x4</option>
-              </select>
-              <div>
-                <button onClick={this.fetchMemes}>Lemme see the memes you made for me fam!</button>
-              </div>
-           </div>
-           : null}
-           {this.state.displayBingoCard ?
-             <div>
-               <BingoCard memes={this.state.usedMemes[this.state.selectedMemeCategory]}></BingoCard>
-             </div>
-           : null}
+        {this.state.displayBingoCard ?
+          <div>
+            <BingoCard cardSize={this.state.bingoCardSize} memes={currentMemeList}></BingoCard>
+          </div>
+          : null}
       </StyledAppContainer>
     );
   }
 }
 
 export default App;
+
+/*
+Old code for dynamic grid selection dropdown in case I happen to need it again
+
+this.displayNextOptions = this.displayNextOptions.bind(this);
+
+displayNextOptions() :
+  this.setState({displayNextOptions: true, displayBingoCard: false});
+
+render() :
+         <div>
+           <button onClick={this.displayNextOptions}>
+             {this.state.displayBingoCard ? 'Update meme category' : 'Lock in meme category'}
+           </button>
+         </div>
+         {this.state.displayNextOptions ?
+           <div>
+              <div>Select grid size</div>
+              <select onChange={(e) => this.selectBingoCardSize(e)} value={this.state.bingoCardSize}>
+                <option value="3x3">3x3</option>
+                <option value="4x4">4x4</option>
+              </select>
+              <div>
+                <button onClick={this.fetchMemes}>
+                  {this.state.displayBingoCard ? 'Update Sample Bingo Card' : 'Show Sample Bingo Card'}
+                </button>
+              </div>
+           </div>
+           : null}
+
+*/
