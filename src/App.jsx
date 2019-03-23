@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import * as jsPDF from 'jspdf'
+import html2canvas from 'html2canvas';
 import { BingoCard } from './BingoCard';
 
 const StyledAppContainer = styled.div`
@@ -23,7 +25,10 @@ class App extends Component {
     this.fetchMemes = this.fetchMemes.bind(this);
     this.extractRandomMemes = this.extractRandomMemes.bind(this);
     this.getRandomIndex = this.getRandomIndex.bind(this);
+    this.shuffleMemes = this.shuffleMemes.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
+    this.printBingoCards = this.printBingoCards.bind(this);
+    this.test = this.test.bind(this);
   }
 
   selectMemeCategory(e) {
@@ -76,6 +81,24 @@ class App extends Component {
     return Math.floor(Math.random() * Math.floor(maxNum));
   }
 
+  shuffleMemes(memeArray) {
+    let currentIndex = memeArray.length;
+    let temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = memeArray[currentIndex];
+      memeArray[currentIndex] = memeArray[randomIndex];
+      memeArray[randomIndex] = temporaryValue;
+    }
+    return memeArray;
+  }
+
   generateBingoCard() {
     let amountOfMemesToGrab;
     if (this.state.bingoCardSize === '3x3') {
@@ -101,6 +124,46 @@ class App extends Component {
         [this.state.currentMemeCategory]: newUsedMemes
       }
     }));
+  }
+
+  printBingoCards() {
+    // let img = document.getElementById('bingoCard');
+    // console.log('dafuq is this then?', img);
+
+    // const doc = new jsPDF('p', 'mm', 'a4');
+    // doc.addImage(img, 'JPG', 0, 0, 211, 298);
+    // doc.save('MemeBingoCard.pdf');
+    // window.open(img);
+    let imageData;
+    console.log('hmm what this return', document.querySelector('#bingoCard'));
+    html2canvas(document.querySelector('#bingoCard'),{ useCORS: true, allowTaint: true, logging: true})
+      .then(canvas => {
+        console.log('what is this canvas?', canvas);
+        console.log(canvas);
+        imageData = canvas.toDataURL('image/jpeg');
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.addImage(imageData, 'PNG', 0, 0, 211, 298);
+        doc.save('MemeBingoCard.pdf');
+        window.open(imageData);
+        // let pdf = new jsPDF('p', 'mm', 'a4');
+        // pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+        // pdf.save(filename);
+      })
+      .catch(error => {
+        console.error('something went wrong printing your pdf', error);
+      })
+  }
+
+  test() {
+    // const imgURL = 'http://s3-us-west-1.amazonaws.com/twitchchat/4Head.jpg';
+    // const testData = {
+    //   image: imgURL,
+    //   imagename: '4head.png'
+    // }
+    // fetch('/saveImage', {
+    //   type: 'POST',
+    //   body: JSON.stringify(testData)
+    // })
   }
 
   render() {
@@ -140,6 +203,9 @@ class App extends Component {
         {this.state.displayBingoCard ?
           <div>
             <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse}></BingoCard>
+            <div>
+              <button onClick={this.printBingoCards}>Print Bingo Cards</button>
+            </div>
           </div>
           : null}
       </StyledAppContainer>
