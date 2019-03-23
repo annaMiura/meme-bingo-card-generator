@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
 import { BingoCard } from './BingoCard';
+import { BingoSquare } from './BingoSquare';
 
 const StyledAppContainer = styled.div`
   text-align: center;
@@ -17,7 +18,8 @@ class App extends Component {
       displayBingoCard: false,
       bingoCardSize: '3x3',
       memeStorage: {},
-      usedMemes: {}
+      usedMemes: {},
+      tryTest: false
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
     this.selectBingoCardSize = this.selectBingoCardSize.bind(this);
@@ -28,6 +30,7 @@ class App extends Component {
     this.shuffleMemes = this.shuffleMemes.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
     this.printBingoCards = this.printBingoCards.bind(this);
+    this.getBase64Image = this.getBase64Image.bind(this);
     this.test = this.test.bind(this);
   }
 
@@ -127,34 +130,37 @@ class App extends Component {
   }
 
   printBingoCards() {
-    // let img = document.getElementById('bingoCard');
-    // console.log('dafuq is this then?', img);
-
-    // const doc = new jsPDF('p', 'mm', 'a4');
-    // doc.addImage(img, 'JPG', 0, 0, 211, 298);
-    // doc.save('MemeBingoCard.pdf');
-    // window.open(img);
-    let imageData;
-    console.log('hmm what this return', document.querySelector('#bingoCard'));
-    html2canvas(document.querySelector('#bingoCard'),{ useCORS: true, allowTaint: true, logging: true})
+    const filename = 'MemeBingoCard.pdf';
+    html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
       .then(canvas => {
-        console.log('what is this canvas?', canvas);
-        console.log(canvas);
-        imageData = canvas.toDataURL('image/jpeg');
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.addImage(imageData, 'PNG', 0, 0, 211, 298);
-        doc.save('MemeBingoCard.pdf');
-        window.open(imageData);
-        // let pdf = new jsPDF('p', 'mm', 'a4');
-        // pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
-        // pdf.save(filename);
-      })
-      .catch(error => {
-        console.error('something went wrong printing your pdf', error);
+        let pdf = new jsPDF('p', 'mm', 'a4');
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+        pdf.save(filename);
       })
   }
 
+  getBase64Image(img) {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    const dataURL = canvas.toDataURL('image/png');
+
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+
+  }
+
   test() {
+    const testImg = document.getElementById('bingoCard');
+    const imgData = this.getBase64Image(testImg);
+    localStorage.setItem('imgData', imgData);
+    // const dataImage = localStorage.getItem('imgData');
+    // let bannerImg = document.getElementById('printableBingoCard');
+    // bannerImg.src = "data:image/png;base64," + dataImage;
+    // this.setState({tryTest: true});
     // const imgURL = 'http://s3-us-west-1.amazonaws.com/twitchchat/4Head.jpg';
     // const testData = {
     //   image: imgURL,
@@ -208,6 +214,7 @@ class App extends Component {
             </div>
           </div>
           : null}
+          {this.state.tryTest ? <BingoSquare></BingoSquare> : null}
       </StyledAppContainer>
     );
   }
