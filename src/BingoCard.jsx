@@ -7,7 +7,6 @@ export const BingoCard = props => {
 
   const memeLinks = props.memes ? Object.keys(props.memes) : null ;
   const numOfColumns = Number(props.cardSize.slice(0, 1));
-  console.log('dafuq are these memeLinks', memeLinks);
   return (
     <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '1128px', display: 'flex', alignItems: 'center'}}>
       <table style={{ border: '1px solid black', display: 'inline-table', tableLayout: 'fixed', width: '100%' }}>
