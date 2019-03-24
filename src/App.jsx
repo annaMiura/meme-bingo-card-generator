@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
-import domtoimage from 'dom-to-image';
 import { BingoCard } from './BingoCard';
 import { BingoSquare } from './BingoSquare';
+// import { data } from '../database/seedData2';
 
 const StyledAppContainer = styled.div`
   text-align: center;
@@ -158,6 +158,33 @@ class App extends Component {
   }
 
   test() {
+    // let count = 0;
+    // data.wholesomememes.forEach(subredditObj => {
+    //   count++
+    //   if (count > 40 && count < 70) {
+    //     console.log(subredditObj.link);
+    //     window.open(subredditObj.link);
+
+    //   }
+    // })
+    // console.log('👺', count)
+//done: 20
+//count > 20 && count < 40
+//count > 40 && count < 60
+//ount > 60 && count < 90
+//count > 90 && count < 120
+//count > 120 && count < 150
+//ount > 150 && count < 180
+
+
+
+    //identify whether height or width is longer and then
+      // once you identify the hsorter one and the longer one, divide the shorter one by the longer one
+      // if the ratio is closest to 1 (heighest probably around 1.2)
+      // upload to s3
+      //ratio 0.8 to 1.2 and just divide the width by the height
+
+
     // const testImg = document.getElementById('bingoCard');
     // const imgData = this.getBase64Image(testImg);
     // localStorage.setItem('imgData', imgData);
@@ -174,18 +201,6 @@ class App extends Component {
     //   type: 'POST',
     //   body: JSON.stringify(testData)
     // })
-
-    const node = document.getElementById('bingoCard')
-    domtoimage.toPng(node)
-      .then(dataURL => {
-        const img = new Image();
-        img.src = dataURL;
-        document.body.appendChild(img);
-      })
-      .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-      });
-
   }
 
   render() {
@@ -226,7 +241,7 @@ class App extends Component {
           <div>
             <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse}></BingoCard>
             <div>
-              <button onClick={this.printBingoCards}>Print Bingo Cards</button>
+              <button onClick={this.test}>Print Bingo Cards</button>
             </div>
           </div>
           : null}

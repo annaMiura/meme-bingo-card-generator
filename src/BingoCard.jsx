@@ -7,6 +7,7 @@ export const BingoCard = props => {
 
   const memeLinks = props.memes ? Object.keys(props.memes) : null ;
   const numOfColumns = Number(props.cardSize.slice(0, 1));
+  console.log('dafuq are these memeLinks', memeLinks);
   return (
     <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '1128px', display: 'flex', alignItems: 'center'}}>
       <table style={{ border: '1px solid black', display: 'inline-table', tableLayout: 'fixed', width: '100%' }}>
@@ -15,40 +16,39 @@ export const BingoCard = props => {
             <th colspan={numOfColumns}>Meme Bingo!</th>
           </tr>
         </thead>
-        {/* <tbody> */}
           {numOfColumns === 3 ?
             <tbody>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                  <img crossOrigin="Anonymous" src={memeLinks[0]} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                  <img crossOrigin="Anonymous" src={memeLinks[1]} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{ height: '250px', width: '100%' }} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6fa4gul.png'} alt={''} style={{ height: '250px', width: '100%' }} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6bpS3T2.png'} alt={''} style={{ height: '250px', width: '100%' }} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/7nLv6YB.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                  <img crossOrigin="Anonymous" src={memeLinks[2]} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/82Ix2gi.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                  <img crossOrigin="Anonymous" src={memeLinks[3]} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/8B7GArU.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                  <img crossOrigin="Anonymous" src={memeLinks[4]} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/ABKz5tW.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                  <img crossOrigin="Anonymous" src={memeLinks[5]} alt={''} style={{ height: '250px', width: '100%' }} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[6]} alt={''} style={{ height: '250px', width: '100%' }} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[7]} alt={''} style={{ height: '250px', width: '100%' }} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[8]} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
               </tr>
             </tbody>
@@ -58,58 +58,58 @@ export const BingoCard = props => {
             <tbody>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[0]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[1]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[2]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/hKlSZjU.png'} alt={''} style={{height: '250px', width: '100%'}} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6fa4gul.png'} alt={''} style={{height: '250px', width: '100%'}} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6bpS3T2.png'} alt={''} style={{height: '250px', width: '100%'}} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/7nLv6YB.png'} alt={''} style={{height: '250px', width: '100%'}} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/NFe4C3U.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[3]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/82Ix2gi.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[4]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/8B7GArU.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[5]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/ABKz5tW.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[6]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/oRRpwP0.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[7]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[8]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[9]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[10]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/hKlSZjU.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                  <img crossOrigin="Anonymous" src={memeLinks[11]} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[12]} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[13]} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[14]} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={memeLinks[15]} alt={''} style={{height: '250px', width: '100%'}} />
                 </td>
               </tr>
             </tbody>
