@@ -8,66 +8,113 @@ export const BingoCard = props => {
   const memeLinks = props.memes ? Object.keys(props.memes) : null ;
   const numOfColumns = Number(props.cardSize.slice(0, 1));
   return (
-    <div id="bingoCard">
-      <table style={{border: '1px solid black', display: 'inline-table'}}>
+    <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '1128px', display: 'flex', alignItems: 'center'}}>
+      <table style={{ border: '1px solid black', display: 'inline-table', tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
             <th colspan={numOfColumns}>Meme Bingo!</th>
           </tr>
         </thead>
-        <tbody>
+        {/* <tbody> */}
           {numOfColumns === 3 ?
             <tbody>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{height: '250px', width: '250px'}}/>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{height: '250px', width: '250px'}} />
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{height: '250px', width: '250px'}} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6fa4gul.png'} alt={''} style={{height: '250px', width: '250px'}} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6bpS3T2.png'} alt={''} style={{height: '250px', width: '250px'}} />
-                </td>
-                <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/7nLv6YB.png'} alt={''} style={{height: '250px', width: '250px'}} />
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/82Ix2gi.png'} alt={''} style={{height: '250px', width: '250px'}} />
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6fa4gul.png'} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/8B7GArU.png'} alt={''} style={{height: '250px', width: '250px'}} />
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6bpS3T2.png'} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/ABKz5tW.png'} alt={''} style={{height: '250px', width: '250px'}} />
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/7nLv6YB.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/82Ix2gi.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/8B7GArU.png'} alt={''} style={{ height: '250px', width: '100%' }} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/ABKz5tW.png'} alt={''} style={{ height: '250px', width: '100%' }} />
                 </td>
               </tr>
             </tbody>
-          : null}
+            : null}
 
           {numOfColumns === 4 ?
             <tbody>
-              <tr></tr>
-              <tr></tr>
-              <tr></tr>
-              <tr></tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/hKlSZjU.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6fa4gul.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/6bpS3T2.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/7nLv6YB.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/NFe4C3U.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/82Ix2gi.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/8B7GArU.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/ABKz5tW.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/oRRpwP0.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/11QnQdu.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/2tIwGlt.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/3PWoO6K.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img crossOrigin="Anonymous" src={'https://s3-us-west-1.amazonaws.com/programmer-memes/hKlSZjU.png'} alt={''} style={{height: '250px', width: '100%'}} />
+                </td>
+              </tr>
             </tbody>
-          : null}
-
-        </tbody>
+            : null}
       </table>
-      {/* {memeLinks.map(memeLink => {
-        return <BingoSquare memeSrc={memeLink} memeProperties={props.memes[memeLink]}/>
-      })} */}
     </div>
   )
 };

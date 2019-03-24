@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 import { BingoCard } from './BingoCard';
 import { BingoSquare } from './BingoSquare';
 
@@ -134,7 +135,10 @@ class App extends Component {
     html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
       .then(canvas => {
         let pdf = new jsPDF('p', 'mm', 'a4');
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+        console.log('width: ', width, 'height: ', height, 'previous stuff: 211, 298');
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, width, height);
         pdf.save(filename);
       })
   }
@@ -154,9 +158,9 @@ class App extends Component {
   }
 
   test() {
-    const testImg = document.getElementById('bingoCard');
-    const imgData = this.getBase64Image(testImg);
-    localStorage.setItem('imgData', imgData);
+    // const testImg = document.getElementById('bingoCard');
+    // const imgData = this.getBase64Image(testImg);
+    // localStorage.setItem('imgData', imgData);
     // const dataImage = localStorage.getItem('imgData');
     // let bannerImg = document.getElementById('printableBingoCard');
     // bannerImg.src = "data:image/png;base64," + dataImage;
@@ -170,6 +174,18 @@ class App extends Component {
     //   type: 'POST',
     //   body: JSON.stringify(testData)
     // })
+
+    const node = document.getElementById('bingoCard')
+    domtoimage.toPng(node)
+      .then(dataURL => {
+        const img = new Image();
+        img.src = dataURL;
+        document.body.appendChild(img);
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
+
   }
 
   render() {
