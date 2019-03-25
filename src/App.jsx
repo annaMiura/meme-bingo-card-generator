@@ -20,6 +20,7 @@ class App extends Component {
       bingoCardSize: '3x3',
       memeStorage: {},
       usedMemes: {},
+      discardedMemes: {},
       tryTest: false
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
@@ -49,8 +50,8 @@ class App extends Component {
     const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory];
     if (fetchedMemes) {
       if (this.state.bingoCardSize !== newBingoSize) {
-        if (newBingoSize === '3x3' && Object.keys(fetchedMemes).length < 9) {
-          this.generateBingoCard(9 - Object.keys(fetchedMemes).length);
+        if (newBingoSize === '3x3' && fetchedMemes.length < 9) {
+          this.generateBingoCard(9 - fetchedMemes.length);
         }
         if (newBingoSize === '4x4' && Object.keys(fetchedMemes).length < 16) {
           this.generateBingoCard(16 - Object.keys(fetchedMemes).length);
@@ -125,11 +126,13 @@ class App extends Component {
 
   generateBingoCard(num) {
     const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
-    const newUsedMemes = {};
+    const newUsedMemes = {
+      [this.state.currentMemeCategory]: []
+    };
     for (let i = 0; i < num; i++) {
       const randomIndex = this.getRandomIndex(memeArray.length);
       const newRandomMeme = memeArray.splice(randomIndex, 1);
-      newUsedMemes[newRandomMeme[0].link] = newRandomMeme[0];
+      newUsedMemes[this.state.currentMemeCategory].push(newRandomMeme[0]);
     }
     if (!this.state.usedMemes[this.state.currentMemeCategory]) {
       this.setState(prevState => ({
@@ -140,7 +143,7 @@ class App extends Component {
         },
         usedMemes: {
           ...prevState.usedMemes,
-          [this.state.currentMemeCategory]: newUsedMemes
+          [this.state.currentMemeCategory]: newUsedMemes[this.state.currentMemeCategory]
         }
       }));
     } else {
@@ -152,10 +155,7 @@ class App extends Component {
         },
         usedMemes: {
           ...prevState.usedMemes,
-          [this.state.currentMemeCategory]: {
-            ...prevState.usedMemes[this.state.currentMemeCategory],
-            ...newUsedMemes
-          }
+          [this.state.currentMemeCategory]: [...prevState.usedMemes[this.state.currentMemeCategory], ...newUsedMemes[this.state.currentMemeCategory]]
         }
       }));
     }
@@ -177,19 +177,28 @@ class App extends Component {
   rerollMeme(e) {
     const rerolledMemeLink = e.target.src;
     const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
-    const randomMeme = memeArray.splice(this.getRandomIndex(memeArray.length), 1);
-    const newUsedMemeObject = this.state.usedMemes;
-    newUsedMemeObject[this.state.currentMemeCategory][randomMeme[0].link] = randomMeme[0];
-    delete newUsedMemeObject[this.state.currentMemeCategory][rerolledMemeLink];
-
-    this.setState(prevState => ({
+    const randomMemeArray = memeArray.splice(this.getRandomIndex(memeArray.length), 1);
+    const newRandomMeme = randomMemeArray[0];
+    const discaredMemeArray = this.state.discardedMemes[this.state.currentMemeCategory] ? this.state.discardedMemes[this.state.currentMemeCategory].slice() : [];
+    const usedMemeArrayCopy = this.state.usedMemes[this.state.currentMemeCategory].slice();
+    for (let i = 0; i < usedMemeArrayCopy.length; i++) {
+      if(usedMemeArrayCopy[i].link === rerolledMemeLink) {
+        discaredMemeArray.push(usedMemeArrayCopy[i]);
+        usedMemeArrayCopy[i] = newRandomMeme;
+      }
+    }
+      this.setState(prevState => ({
       memeStorage: {
         ...prevState.memeStorage,
         [this.state.currentMemeCategory]: memeArray
       },
       usedMemes: {
         ...prevState.usedMemes,
-        [this.state.currentMemeCategory]: newUsedMemeObject[this.state.currentMemeCategory]
+        [this.state.currentMemeCategory]: usedMemeArrayCopy
+      },
+      discardedMemes: {
+        ...prevState.discardedMemes,
+        [this.state.currentMemeCategory]: discaredMemeArray
       }
     }));
   }

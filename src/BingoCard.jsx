@@ -4,7 +4,7 @@ import { BingoSquare } from './BingoSquare';
 //
 
 export const BingoCard = props => {
-
+  //props.memes is now an array of object
   const memeLinks = props.memes ? Object.keys(props.memes) : null ;
   const numOfColumns = Number(props.cardSize.slice(0, 1));
   return (
@@ -19,35 +19,35 @@ export const BingoCard = props => {
             <tbody>
               <tr>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[0]} style={{ height: '250px', width: '100%' }} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[0].link} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[1]} style={{ height: '250px', width: '100%' }} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[1].link} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[2]} style={{ height: '250px', width: '100%' }} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[3]} style={{ height: '250px', width: '100%' }} />
-                </td>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[4]} style={{ height: '250px', width: '100%' }} />
-                </td>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[5]} style={{ height: '250px', width: '100%' }} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[2].link} style={{ height: '250px', width: '100%' }} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[6]} style={{ height: '250px', width: '100%' }} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[3].link} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[7]} style={{ height: '250px', width: '100%' }} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[4].link} style={{ height: '250px', width: '100%' }} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[8]} style={{ height: '250px', width: '100%' }} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[5].link} style={{ height: '250px', width: '100%' }} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[6].link} style={{ height: '250px', width: '100%' }} />
+                </td>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[7].link} style={{ height: '250px', width: '100%' }} />
+                </td>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[8].link} style={{ height: '250px', width: '100%' }} />
                 </td>
               </tr>
             </tbody>
@@ -57,58 +57,58 @@ export const BingoCard = props => {
             <tbody>
               <tr>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[0]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[0].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[1]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[1].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[2]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[2].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[3]} style={{height: '250px', width: '100%'}} />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[4]} style={{height: '250px', width: '100%'}} />
-                </td>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[5]} style={{height: '250px', width: '100%'}} />
-                </td>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[6]} style={{height: '250px', width: '100%'}} />
-                </td>
-                <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[7]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[3].link} style={{height: '250px', width: '100%'}} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[8]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[4].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[9]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[5].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[10]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[6].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[11]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[7].link} style={{height: '250px', width: '100%'}} />
                 </td>
               </tr>
               <tr>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[12]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[8].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[13]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[9].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[14]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[10].link} style={{height: '250px', width: '100%'}} />
                 </td>
                 <td>
-                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={memeLinks[15]} style={{height: '250px', width: '100%'}} />
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[11].link} style={{height: '250px', width: '100%'}} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[12].link} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[13].link} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[14].link} style={{height: '250px', width: '100%'}} />
+                </td>
+                <td>
+                  <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.memes[15].link} style={{height: '250px', width: '100%'}} />
                 </td>
               </tr>
             </tbody>
@@ -120,7 +120,7 @@ export const BingoCard = props => {
 
 // export const BingoCard = props => {
 
-//   const memeLinks = props.memes ? Object.keys(props.memes) : null ;
+//   const props.memes = props.memes ? Object.keys(props.memes) : null ;
 //   const numOfColumns = Number(props.cardSize.slice(0, 1));
 //   return (
 //     <div>
