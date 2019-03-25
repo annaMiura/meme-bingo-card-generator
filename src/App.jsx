@@ -33,6 +33,7 @@ class App extends Component {
     this.getRandomIndex = this.getRandomIndex.bind(this);
     this.shuffleMemes = this.shuffleMemes.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
+    this.bingoCardVariationGenerator = this.bingoCardVariationGenerator.bind(this);
     this.printBingoCards = this.printBingoCards.bind(this);
     this.rerollMeme = this.rerollMeme.bind(this);
     this.test = this.test.bind(this);
@@ -159,13 +160,19 @@ class App extends Component {
     }
   }
 
+  bingoCardVariationGenerator() {
+
+  }
+
   printBingoCards() {
+    document.querySelector('#printableBingoCard').style.display = 'flex';
     const filename = 'MemeBingoCard.pdf';
-    html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
+    html2canvas(document.querySelector('#printableBingoCard'), {useCORS: true})
       .then(canvas => {
         let pdf = new jsPDF('p', 'mm', 'a4');
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
         pdf.save(filename);
+        document.querySelector('#printableBingoCard').style.display = 'none';
       })
       .catch(error => {
         console.log('something went wrong printing bingo cards', error);
@@ -257,13 +264,18 @@ class App extends Component {
         </div>
         {this.state.displayBingoCard ?
           <div>
-            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme}></BingoCard>
+            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} />
+            <PrintableBingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} />
+            <div>
+              <label>Enter how many variations you want of this bingo card</label>
+              <input type='number' required/>
+            </div>
             <div>
               <button onClick={this.printBingoCards}>Print Bingo Cards</button>
             </div>
           </div>
           : null}
-          {this.state.tryTest ? <BingoSquare></BingoSquare> : null}
+         {this.state.tryTest ? <BingoSquare></BingoSquare> : null}
       </StyledAppContainer>
     );
   }
