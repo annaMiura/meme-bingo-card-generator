@@ -23,6 +23,7 @@ class App extends Component {
       memeStorage: {},
       usedMemes: {},
       discardedMemes: {},
+      bingoCardVariationNum: 1,
       tryTest: false
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
@@ -34,6 +35,7 @@ class App extends Component {
     this.shuffleMemes = this.shuffleMemes.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
     this.bingoCardVariationGenerator = this.bingoCardVariationGenerator.bind(this);
+    this.updateBingoCardVariationNum = this.updateBingoCardVariationNum.bind(this);
     this.printBingoCards = this.printBingoCards.bind(this);
     this.rerollMeme = this.rerollMeme.bind(this);
     this.test = this.test.bind(this);
@@ -105,21 +107,12 @@ class App extends Component {
     return Math.floor(Math.random() * Math.floor(maxNum));
   }
 
-  shuffleMemes(memeArray) {
-    let currentIndex = memeArray.length;
-    let temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = memeArray[currentIndex];
-      memeArray[currentIndex] = memeArray[randomIndex];
-      memeArray[randomIndex] = temporaryValue;
-    }
+  shuffleMemes(array) {
+    const memeArray = array.slice();
+    for (let i = memeArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [memeArray[i], memeArray[j]] = [memeArray[j], memeArray[i]];
+  }
     return memeArray;
   }
 
@@ -164,7 +157,20 @@ class App extends Component {
 
   }
 
+  updateBingoCardVariationNum(e) {
+    this.setState({bingoCardVariationNum: e.target.value});
+  }
+
   printBingoCards() {
+    //if bingoCardVariationNum is greater than 1
+      // we need to create as many bingo cards as specified
+
+      //loop through bingoCardVariation Num
+        // first loop through add a specific flag
+      // return a BingoCard component for every iteration
+        // after first iteration each display has to be none and the given meme array needs to be shuffled
+        // each iteration needs to be added onto a page to be printed as well
+    const variationNumber = this.state.bingoCardVariationNum;
     document.querySelector('#bingoCard').style.height = '1128px';
     const filename = 'MemeBingoCard.pdf';
     html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
@@ -209,6 +215,18 @@ class App extends Component {
   }
 
   test() {
+    const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory]
+    const memesToUse = fetchedMemes ? fetchedMemes : this.state.usedMemes[this.state.previousMemeCategory]
+    const output = [];
+    for (let i = 0; i < this.state.bingoCardVariationNum; i++) {
+      if (i > 0) {
+        output.push(<BingoCard cardSize={this.state.bingoCardSize} id={`bingoCard${i}`} memes={this.shuffleMemes(memesToUse)} newMeme={this.rerollMeme} />);
+      } else {
+        output.push(<BingoCard cardSize={this.state.bingoCardSize} id={`bingoCard${i}`} memes={memesToUse} newMeme={this.rerollMeme} />);
+      }
+    }
+    return output;
+
     // let count = 0;
     // data.wholesomememes.forEach(subredditObj => {
     //   count++
@@ -237,7 +255,7 @@ class App extends Component {
         <h2>Meme Bingo Card Generator</h2>
         <span>Select a meme category:</span>
         <span>
-          <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.currentMemeCategory}>
+          <select onChange={this.selectMemeCategory} value={this.state.currentMemeCategory}>
             <option value="programmerHumor">Programming</option>
             <option value="dndmemes">Dungeons and Dragons</option>
             <option value="Overwatch_Memes">Overwatch</option>
@@ -252,7 +270,7 @@ class App extends Component {
         </span>
         <span>
           <span>Select grid size</span>
-          <select onChange={(e) => this.selectBingoCardSize(e)} value={this.state.bingoCardSize}>
+          <select onChange={this.selectBingoCardSize} value={this.state.bingoCardSize}>
             <option value="3x3">3x3</option>
             <option value="4x4">4x4</option>
           </select>
@@ -264,10 +282,11 @@ class App extends Component {
         </div>
         {this.state.displayBingoCard ?
           <div>
-            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} />
+            {/* <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} /> */}
+            {this.test()}
             <div>
               <label>Enter how many variations you want of this bingo card</label>
-              <input type='number' required/>
+              <input onChange={this.updateBingoCardVariationNum} type='number' required/>
             </div>
             <div>
               <button onClick={this.printBingoCards}>Print Bingo Cards</button>

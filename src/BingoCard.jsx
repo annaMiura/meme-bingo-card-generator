@@ -4,7 +4,7 @@ import { BingoSquare } from './BingoSquare';
  export const BingoCard = props => {
   const numOfColumns = Number(props.cardSize.slice(0, 1));
   return (
-    <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '100%', display: 'flex', alignItems: 'center'}}>
+    <div id={props.id} style={{width: '800px', margin: 'auto', padding: 0, height: '100%', display: 'flex', alignItems: 'center'}}>
       <table style={{ border: '1px solid black', display: 'inline-table', tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
