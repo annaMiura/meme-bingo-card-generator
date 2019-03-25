@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
 import { BingoCard } from './BingoCard';
-import { PrintableBingoCard } from './PrintableBingoCard';
-import { BingoSquare } from './BingoSquare';
-
-// import { data } from '../database/seedData2';
 
 const StyledAppContainer = styled.div`
   text-align: center;
@@ -38,7 +34,7 @@ class App extends Component {
     this.updateBingoCardVariationNum = this.updateBingoCardVariationNum.bind(this);
     this.printBingoCards = this.printBingoCards.bind(this);
     this.rerollMeme = this.rerollMeme.bind(this);
-    this.test = this.test.bind(this);
+    this.bingoCards = this.bingoCards.bind(this);
   }
 
   selectMemeCategory(e) {
@@ -46,23 +42,35 @@ class App extends Component {
     this.setState(prevState => ({
       previousMemeCategory: prevState.currentMemeCategory,
       currentMemeCategory: newMemeCategory
-    }))
+    }));
   }
 
   selectBingoCardSize(e) {
     const newBingoSize = e.target.value;
     this.setState({bingoCardSize: newBingoSize});
+    //WORKS except for when you fetch a cateogry at 3x3 bingo size, switch to a different meme category and then select 4x4 size, when you return to different category there won't be enough  memes there
     const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory];
     if (fetchedMemes) {
       if (this.state.bingoCardSize !== newBingoSize) {
         if (newBingoSize === '3x3' && fetchedMemes.length < 9) {
           this.generateBingoCard(9 - fetchedMemes.length);
         }
-        if (newBingoSize === '4x4' && Object.keys(fetchedMemes).length < 16) {
-          this.generateBingoCard(16 - Object.keys(fetchedMemes).length);
+        if (newBingoSize === '4x4' && fetchedMemes.length < 16) {
+          this.generateBingoCard(16 - fetchedMemes.length);
         }
+    //   I eventually should write something that decreases the amount of memes in usedMemes if the grid size is downsized
       }
     }
+    //if I bug fix:
+    // const fetchedMemeCategories = Object.keys(this.state.memeStorage);
+    // if (newBingoSize === '4x4') {
+    //   fetchedMemeCategories.forEach(category => {
+    //     if (this.state.usedMemes[category].length < 16) {
+    //       console.log('did we ever check to see if previous categories didnt have enough memes?')
+    //       this.generateBingoCard(16 - fetchedMemes.length, category);
+    //     }
+    //   })
+    // }
   }
 
   getMemes() {
@@ -116,7 +124,9 @@ class App extends Component {
     return memeArray;
   }
 
-  generateBingoCard(num) {
+  generateBingoCard(num, category) {
+    //if I bug fix:
+    //const memeArray = category ? this.state.memeStorage[category].slice() : this.state.memeStorage[this.state.currentMemeCategory].slice();
     const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
     const newUsedMemes = {
       [this.state.currentMemeCategory]: []
@@ -158,31 +168,53 @@ class App extends Component {
   }
 
   updateBingoCardVariationNum(e) {
-    this.setState({bingoCardVariationNum: e.target.value});
+    if (e.target.value < 1 || !e.target.value) {
+      this.setState({bingoCardVariationNum: 1});
+    } else {
+      this.setState({bingoCardVariationNum: e.target.value});
+    }
   }
 
   printBingoCards() {
-    //if bingoCardVariationNum is greater than 1
-      // we need to create as many bingo cards as specified
+    const filename = 'MemeBingoCard.pdf'
+    let pdf = new jsPDF('p', 'mm', 'a4');
 
-      //loop through bingoCardVariation Num
-        // first loop through add a specific flag
-      // return a BingoCard component for every iteration
-        // after first iteration each display has to be none and the given meme array needs to be shuffled
-        // each iteration needs to be added onto a page to be printed as well
-    const variationNumber = this.state.bingoCardVariationNum;
-    document.querySelector('#bingoCard').style.height = '1128px';
-    const filename = 'MemeBingoCard.pdf';
-    html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
-      .then(canvas => {
-        let pdf = new jsPDF('p', 'mm', 'a4');
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
-        pdf.save(filename);
-        document.querySelector('#bingoCard').style.height = '100%';
-      })
-      .catch(error => {
-        console.log('something went wrong printing bingo cards', error);
-      });
+    const generateImage = async (num) => {
+      if (num > 0) {
+        document.querySelector(`#bingoCard${num}`).style.height = '1128px';
+        document.querySelector(`#bingoCard${num}`).style.display = 'flex';
+        return html2canvas(document.querySelector(`#bingoCard${num}`), {useCORS: true})
+          .then(canvas => {
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298)
+            document.querySelector(`#bingoCard${num}`).style.height = '100%';
+            document.querySelector(`#bingoCard${num}`).style.display = 'none';
+          })
+          .catch(error => {
+            console.log('something went wrong printing bingo cards', error);
+          });
+
+      } else {
+        document.querySelector(`#bingoCard${num}`).style.height = '1128px';
+        return html2canvas(document.querySelector(`#bingoCard${num}`), {useCORS: true})
+          .then(canvas => {
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298)
+            document.querySelector(`#bingoCard${num}`).style.height = '100%';
+          })
+          .catch(error => {
+            console.log('something went wrong printing bingo cards', error);
+          });
+      }
+     }
+
+     (async () => {
+      for (let i = 0; i < this.state.bingoCardVariationNum; i++) {
+        const canvas = await generateImage(i);
+        pdf.addPage();
+      }
+      const pageCount = pdf.internal.getNumberOfPages();
+      pdf.deletePage(pageCount);
+      pdf.save(filename);
+    })();
   }
 
   rerollMeme(e) {
@@ -214,36 +246,18 @@ class App extends Component {
     }));
   }
 
-  test() {
+  bingoCards() {
     const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory]
     const memesToUse = fetchedMemes ? fetchedMemes : this.state.usedMemes[this.state.previousMemeCategory]
     const output = [];
     for (let i = 0; i < this.state.bingoCardVariationNum; i++) {
       if (i > 0) {
-        output.push(<BingoCard cardSize={this.state.bingoCardSize} id={`bingoCard${i}`} memes={this.shuffleMemes(memesToUse)} newMeme={this.rerollMeme} />);
+        output.push(<BingoCard cardSize={this.state.bingoCardSize} display={'none'} id={i} memes={this.shuffleMemes(memesToUse)} newMeme={this.rerollMeme} />);
       } else {
-        output.push(<BingoCard cardSize={this.state.bingoCardSize} id={`bingoCard${i}`} memes={memesToUse} newMeme={this.rerollMeme} />);
+        output.push(<BingoCard cardSize={this.state.bingoCardSize} display={'flex'} id={i} memes={memesToUse} newMeme={this.rerollMeme} />);
       }
     }
     return output;
-
-    // let count = 0;
-    // data.wholesomememes.forEach(subredditObj => {
-    //   count++
-    //   if (count > 40 && count < 70) {
-    //     console.log(subredditObj.link);
-    //     window.open(subredditObj.link);
-
-    //   }
-    // })
-    // console.log('👺', count)
-    //done: 20
-    //count > 20 && count < 40
-    //count > 40 && count < 60
-    //ount > 60 && count < 90
-    //count > 90 && count < 120
-    //count > 120 && count < 150
-    //ount > 150 && count < 180
   }
 
   render() {
@@ -282,8 +296,7 @@ class App extends Component {
         </div>
         {this.state.displayBingoCard ?
           <div>
-            {/* <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} /> */}
-            {this.test()}
+            {this.bingoCards()}
             <div>
               <label>Enter how many variations you want of this bingo card</label>
               <input onChange={this.updateBingoCardVariationNum} type='number' required/>
@@ -293,41 +306,9 @@ class App extends Component {
             </div>
           </div>
           : null}
-         {this.state.tryTest ? <BingoSquare></BingoSquare> : null}
       </StyledAppContainer>
     );
   }
 }
 
 export default App;
-
-/*
-Old code for dynamic grid selection dropdown in case I happen to need it again
-
-this.displayNextOptions = this.displayNextOptions.bind(this);
-
-displayNextOptions() :
-  this.setState({displayNextOptions: true, displayBingoCard: false});
-
-render() :
-         <div>
-           <button onClick={this.displayNextOptions}>
-             {this.state.displayBingoCard ? 'Update meme category' : 'Lock in meme category'}
-           </button>
-         </div>
-         {this.state.displayNextOptions ?
-           <div>
-              <div>Select grid size</div>
-              <select onChange={(e) => this.selectBingoCardSize(e)} value={this.state.bingoCardSize}>
-                <option value="3x3">3x3</option>
-                <option value="4x4">4x4</option>
-              </select>
-              <div>
-                <button onClick={this.fetchMemes}>
-                  {this.state.displayBingoCard ? 'Update Sample Bingo Card' : 'Show Sample Bingo Card'}
-                </button>
-              </div>
-           </div>
-           : null}
-
-*/
