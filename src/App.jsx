@@ -31,6 +31,7 @@ class App extends Component {
     this.shuffleMemes = this.shuffleMemes.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
     this.printBingoCards = this.printBingoCards.bind(this);
+    this.rerollMeme = this.rerollMeme.bind(this);
     this.test = this.test.bind(this);
   }
 
@@ -43,21 +44,16 @@ class App extends Component {
   }
 
   selectBingoCardSize(e) {
-    this.setState({bingoCardSize: e.target.value});
+    const newBingoSize = e.target.value;
+    this.setState({bingoCardSize: newBingoSize});
     const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory];
-    console.log('what does object key length of fetchedMemes look like? ', Object.keys(fetchedMemes).length);
-    console.log('hmmmmm what does bingoCardSize look like rn? ', e.target.value, this.state.bingoCardSize);
     if (fetchedMemes) {
-      if (this.state.bingoCardSize !== e.target.value) {
-        if (e.target.value === '3x3' && Object.keys(fetchedMemes).length < 9) {
+      if (this.state.bingoCardSize !== newBingoSize) {
+        if (newBingoSize === '3x3' && Object.keys(fetchedMemes).length < 9) {
           this.generateBingoCard(9 - Object.keys(fetchedMemes).length);
-          console.log('we hit this block: ', fetchedMemes.length);
-          // this.setState({displayBingoCard: false});
         }
-        if (e.target.value === '4x4' && Object.keys(fetchedMemes).length < 16) {
+        if (newBingoSize === '4x4' && Object.keys(fetchedMemes).length < 16) {
           this.generateBingoCard(16 - Object.keys(fetchedMemes).length);
-          console.log('we hit this block too: ');
-          // this.setState({displayBingoCard: false});
         }
       }
     }
@@ -178,6 +174,26 @@ class App extends Component {
       });
   }
 
+  rerollMeme(e) {
+    const rerolledMemeLink = e.target.src;
+    const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
+    const randomMeme = memeArray.splice(this.getRandomIndex(memeArray.length), 1);
+    const newUsedMemeObject = this.state.usedMemes;
+    newUsedMemeObject[this.state.currentMemeCategory][randomMeme[0].link] = randomMeme[0];
+    delete newUsedMemeObject[this.state.currentMemeCategory][rerolledMemeLink];
+
+    this.setState(prevState => ({
+      memeStorage: {
+        ...prevState.memeStorage,
+        [this.state.currentMemeCategory]: memeArray
+      },
+      usedMemes: {
+        ...prevState.usedMemes,
+        [this.state.currentMemeCategory]: newUsedMemeObject[this.state.currentMemeCategory]
+      }
+    }));
+  }
+
   test() {
     // let count = 0;
     // data.wholesomememes.forEach(subredditObj => {
@@ -209,7 +225,7 @@ class App extends Component {
         <span>
           <select onChange={(e) => this.selectMemeCategory(e)} value={this.state.currentMemeCategory}>
             <option value="programmerHumor">Programming</option>
-            {/* <option value="dndmemes">Dungeons and Dragons</option>
+            <option value="dndmemes">Dungeons and Dragons</option>
             <option value="Overwatch_Memes">Overwatch</option>
             <option value="wholesomememes">Wholesome</option>
             <option value="prequelmemes">Star Wars Prequels</option>
@@ -217,7 +233,7 @@ class App extends Component {
             <option value="lotrmemes">Lord of the Rings</option>
             <option value="historymemes">History</option>
             <option value="lolcats">Cats</option>
-            <option value="dankmemes">Dank</option> */}
+            <option value="dankmemes">Dank</option>
           </select>
         </span>
         <span>
@@ -234,7 +250,7 @@ class App extends Component {
         </div>
         {this.state.displayBingoCard ?
           <div>
-            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse}></BingoCard>
+            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme}></BingoCard>
             <div>
               <button onClick={this.printBingoCards}>Print Bingo Cards</button>
             </div>
