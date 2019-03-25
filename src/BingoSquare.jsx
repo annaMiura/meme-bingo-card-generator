@@ -2,8 +2,8 @@ import React from 'react';
 
 export const BingoSquare = props => {
   return (
-    <span>
-      <img src={props.memeSrc} alt={props.memeProperties.title} />
-    </span>
+    <td>
+      <img alt={''} crossOrigin="Anonymous" onClick={(e) => props.newMeme(e)} src={props.meme.link} style={{ height: '250px', width: '100%' }} />
+    </td>
   )
 };

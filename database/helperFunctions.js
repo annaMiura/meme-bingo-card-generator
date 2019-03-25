@@ -34,13 +34,19 @@ const grabData = async (subRedditString, num) => {
 
 const dataFormatter = arrayOfObjects => {
     return arrayOfObjects.map(obj => {
-        return obj = {
-            id: obj.id,
-            title: obj.title,
-            link: obj.link,
-            score: obj.score,
-            views: obj.views,
-            nsfw: obj.nsfw
+        const ratio = obj.width / obj.height;
+        console.log('this is the ratio 💯', ratio);
+        if (ratio >= 0.8 && ratio <= 1.2) {
+            return obj = {
+                id: obj.id,
+                title: obj.title,
+                link: obj.link,
+                height: obj.height,
+                width: obj.width,
+                size: obj.size,
+                views: obj.views,
+                nsfw: obj.nsfw
+            }
         }
     });
 }

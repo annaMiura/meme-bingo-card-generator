@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import * as jsPDF from 'jspdf'
+import html2canvas from 'html2canvas';
 import { BingoCard } from './BingoCard';
+import { PrintableBingoCard } from './PrintableBingoCard';
+import { BingoSquare } from './BingoSquare';
+
+// import { data } from '../database/seedData2';
 
 const StyledAppContainer = styled.div`
   text-align: center;
@@ -15,7 +21,9 @@ class App extends Component {
       displayBingoCard: false,
       bingoCardSize: '3x3',
       memeStorage: {},
-      usedMemes: {}
+      usedMemes: {},
+      discardedMemes: {},
+      tryTest: false
     };
     this.selectMemeCategory = this.selectMemeCategory.bind(this);
     this.selectBingoCardSize = this.selectBingoCardSize.bind(this);
@@ -23,7 +31,12 @@ class App extends Component {
     this.fetchMemes = this.fetchMemes.bind(this);
     this.extractRandomMemes = this.extractRandomMemes.bind(this);
     this.getRandomIndex = this.getRandomIndex.bind(this);
+    this.shuffleMemes = this.shuffleMemes.bind(this);
     this.generateBingoCard = this.generateBingoCard.bind(this);
+    this.bingoCardVariationGenerator = this.bingoCardVariationGenerator.bind(this);
+    this.printBingoCards = this.printBingoCards.bind(this);
+    this.rerollMeme = this.rerollMeme.bind(this);
+    this.test = this.test.bind(this);
   }
 
   selectMemeCategory(e) {
@@ -35,11 +48,23 @@ class App extends Component {
   }
 
   selectBingoCardSize(e) {
-    this.setState({bingoCardSize: e.target.value});
+    const newBingoSize = e.target.value;
+    this.setState({bingoCardSize: newBingoSize});
+    const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory];
+    if (fetchedMemes) {
+      if (this.state.bingoCardSize !== newBingoSize) {
+        if (newBingoSize === '3x3' && fetchedMemes.length < 9) {
+          this.generateBingoCard(9 - fetchedMemes.length);
+        }
+        if (newBingoSize === '4x4' && Object.keys(fetchedMemes).length < 16) {
+          this.generateBingoCard(16 - Object.keys(fetchedMemes).length);
+        }
+      }
+    }
   }
 
   getMemes() {
-    if (this.state.memeStorage[this.state.currentMemeCategory]) {
+    if (this.state.usedMemes[this.state.currentMemeCategory] ) {
       this.extractRandomMemes()
     } else {
       this.fetchMemes();
@@ -61,7 +86,11 @@ class App extends Component {
             [this.state.currentMemeCategory]: memeArray
           }
         }))
-        this.generateBingoCard();
+        if (this.state.bingoCardSize === '3x3') {
+          this.generateBingoCard(9);
+        } else if (this.state.bingoCardSize === '4x4') {
+          this.generateBingoCard(16);
+        }
       })
       .catch(error => {
         console.error('something went wrong fetching the desired memes', error);
@@ -76,31 +105,127 @@ class App extends Component {
     return Math.floor(Math.random() * Math.floor(maxNum));
   }
 
-  generateBingoCard() {
-    let amountOfMemesToGrab;
-    if (this.state.bingoCardSize === '3x3') {
-      amountOfMemesToGrab = 9;
-    } else if (this.state.bingoCardSize === '4x4') {
-      amountOfMemesToGrab = 16;
+  shuffleMemes(memeArray) {
+    let currentIndex = memeArray.length;
+    let temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = memeArray[currentIndex];
+      memeArray[currentIndex] = memeArray[randomIndex];
+      memeArray[randomIndex] = temporaryValue;
     }
+    return memeArray;
+  }
+
+  generateBingoCard(num) {
     const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
-    const newUsedMemes = {};
-    for (let i = 0; i < amountOfMemesToGrab; i++) {
+    const newUsedMemes = {
+      [this.state.currentMemeCategory]: []
+    };
+    for (let i = 0; i < num; i++) {
       const randomIndex = this.getRandomIndex(memeArray.length);
       const newRandomMeme = memeArray.splice(randomIndex, 1);
-      newUsedMemes[newRandomMeme[0].link] = newRandomMeme[0];
+      newUsedMemes[this.state.currentMemeCategory].push(newRandomMeme[0]);
     }
-    this.setState(prevState => ({
-      displayBingoCard: true,
+    if (!this.state.usedMemes[this.state.currentMemeCategory]) {
+      this.setState(prevState => ({
+        displayBingoCard: true,
+        memeStorage: {
+          ...prevState.memeStorage,
+          [this.state.currentMemeCategory]: memeArray
+        },
+        usedMemes: {
+          ...prevState.usedMemes,
+          [this.state.currentMemeCategory]: newUsedMemes[this.state.currentMemeCategory]
+        }
+      }));
+    } else {
+      this.setState(prevState => ({
+        displayBingoCard: true,
+        memeStorage: {
+          ...prevState.memeStorage,
+          [this.state.currentMemeCategory]: memeArray
+        },
+        usedMemes: {
+          ...prevState.usedMemes,
+          [this.state.currentMemeCategory]: [...prevState.usedMemes[this.state.currentMemeCategory], ...newUsedMemes[this.state.currentMemeCategory]]
+        }
+      }));
+    }
+  }
+
+  bingoCardVariationGenerator() {
+
+  }
+
+  printBingoCards() {
+    document.querySelector('#bingoCard').style.height = '1128px';
+    const filename = 'MemeBingoCard.pdf';
+    html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
+      .then(canvas => {
+        let pdf = new jsPDF('p', 'mm', 'a4');
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
+        pdf.save(filename);
+        document.querySelector('#bingoCard').style.height = '100%';
+      })
+      .catch(error => {
+        console.log('something went wrong printing bingo cards', error);
+      });
+  }
+
+  rerollMeme(e) {
+    const rerolledMemeLink = e.target.src;
+    const memeArray = this.state.memeStorage[this.state.currentMemeCategory].slice();
+    const randomMemeArray = memeArray.splice(this.getRandomIndex(memeArray.length), 1);
+    const newRandomMeme = randomMemeArray[0];
+    const discaredMemeArray = this.state.discardedMemes[this.state.currentMemeCategory] ? this.state.discardedMemes[this.state.currentMemeCategory].slice() : [];
+    const usedMemeArrayCopy = this.state.usedMemes[this.state.currentMemeCategory].slice();
+    for (let i = 0; i < usedMemeArrayCopy.length; i++) {
+      if(usedMemeArrayCopy[i].link === rerolledMemeLink) {
+        discaredMemeArray.push(usedMemeArrayCopy[i]);
+        usedMemeArrayCopy[i] = newRandomMeme;
+      }
+    }
+      this.setState(prevState => ({
       memeStorage: {
         ...prevState.memeStorage,
         [this.state.currentMemeCategory]: memeArray
       },
       usedMemes: {
         ...prevState.usedMemes,
-        [this.state.currentMemeCategory]: newUsedMemes
+        [this.state.currentMemeCategory]: usedMemeArrayCopy
+      },
+      discardedMemes: {
+        ...prevState.discardedMemes,
+        [this.state.currentMemeCategory]: discaredMemeArray
       }
     }));
+  }
+
+  test() {
+    // let count = 0;
+    // data.wholesomememes.forEach(subredditObj => {
+    //   count++
+    //   if (count > 40 && count < 70) {
+    //     console.log(subredditObj.link);
+    //     window.open(subredditObj.link);
+
+    //   }
+    // })
+    // console.log('👺', count)
+    //done: 20
+    //count > 20 && count < 40
+    //count > 40 && count < 60
+    //ount > 60 && count < 90
+    //count > 90 && count < 120
+    //count > 120 && count < 150
+    //ount > 150 && count < 180
   }
 
   render() {
@@ -139,9 +264,17 @@ class App extends Component {
         </div>
         {this.state.displayBingoCard ?
           <div>
-            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse}></BingoCard>
+            <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} />
+            <div>
+              <label>Enter how many variations you want of this bingo card</label>
+              <input type='number' required/>
+            </div>
+            <div>
+              <button onClick={this.printBingoCards}>Print Bingo Cards</button>
+            </div>
           </div>
           : null}
+         {this.state.tryTest ? <BingoSquare></BingoSquare> : null}
       </StyledAppContainer>
     );
   }

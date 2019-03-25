@@ -8964,7 +8964,7 @@ module.exports.data = {
     },
     {
       "id": "thzRXIL",
-      "title": "Time for another anullment",
+      "title": "Time for another a ment",
       "link": "https://i.imgur.com/thzRXIL.jpg",
       "score": 947,
       "views": 2471,
