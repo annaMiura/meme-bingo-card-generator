@@ -165,14 +165,14 @@ class App extends Component {
   }
 
   printBingoCards() {
-    document.querySelector('#printableBingoCard').style.display = 'flex';
+    document.querySelector('#bingoCard').style.height = '1128px';
     const filename = 'MemeBingoCard.pdf';
-    html2canvas(document.querySelector('#printableBingoCard'), {useCORS: true})
+    html2canvas(document.querySelector('#bingoCard'), {useCORS: true})
       .then(canvas => {
         let pdf = new jsPDF('p', 'mm', 'a4');
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 211, 298);
         pdf.save(filename);
-        document.querySelector('#printableBingoCard').style.display = 'none';
+        document.querySelector('#bingoCard').style.height = '100%';
       })
       .catch(error => {
         console.log('something went wrong printing bingo cards', error);
@@ -265,7 +265,6 @@ class App extends Component {
         {this.state.displayBingoCard ?
           <div>
             <BingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} />
-            <PrintableBingoCard cardSize={this.state.bingoCardSize} memes={memesToUse} newMeme={this.rerollMeme} />
             <div>
               <label>Enter how many variations you want of this bingo card</label>
               <input type='number' required/>
