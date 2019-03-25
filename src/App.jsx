@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import * as jsPDF from 'jspdf'
 import html2canvas from 'html2canvas';
 import { BingoCard } from './BingoCard';
+import { PrintableBingoCard } from './PrintableBingoCard';
 import { BingoSquare } from './BingoSquare';
+
 // import { data } from '../database/seedData2';
 
 const StyledAppContainer = styled.div`

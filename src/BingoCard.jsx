@@ -1,24 +1,17 @@
 import React from 'react';
 import { BingoSquare } from './BingoSquare';
 
-//
-
-export const BingoCard = props => {
+ export const BingoCard = props => {
   const numOfColumns = Number(props.cardSize.slice(0, 1));
   return (
-    <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '1128px', display: 'flex', alignItems: 'center'}}>
+    <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '100%', display: 'flex', alignItems: 'center'}}>
       <table style={{ border: '1px solid black', display: 'inline-table', tableLayout: 'fixed', width: '100%' }}>
         <thead>
           <tr>
             <th colspan={numOfColumns}>Meme Bingo!</th>
           </tr>
         </thead>
-        <tbody>
-          {props.memes.map(memeObj => {
-            return <BingoSquare meme={memeObj} newMeme={props.newMeme} />
-          })}
-        </tbody>
-          {/* {numOfColumns === 3 ?
+          {numOfColumns === 3 ?
             <tbody>
               <tr>
                 <td>
@@ -115,7 +108,7 @@ export const BingoCard = props => {
                 </td>
               </tr>
             </tbody>
-            : null} */}
+            : null}
       </table>
     </div>
   )
