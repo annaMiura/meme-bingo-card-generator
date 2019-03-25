@@ -61,10 +61,6 @@ class App extends Component {
   }
 
   getMemes() {
-    //cases to check for:
-      // if there are usedMemes with this category and if the bingo card size makes sense with the length
-
-      //on change for bingo card size check current length of used memes
     if (this.state.usedMemes[this.state.currentMemeCategory] ) {
       this.extractRandomMemes()
     } else {

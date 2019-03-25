@@ -4,8 +4,6 @@ import { BingoSquare } from './BingoSquare';
 //
 
 export const BingoCard = props => {
-  //props.memes is now an array of object
-  const memeLinks = props.memes ? Object.keys(props.memes) : null ;
   const numOfColumns = Number(props.cardSize.slice(0, 1));
   return (
     <div id="bingoCard" style={{width: '800px', margin: 'auto', padding: 0, height: '1128px', display: 'flex', alignItems: 'center'}}>
@@ -15,7 +13,12 @@ export const BingoCard = props => {
             <th colspan={numOfColumns}>Meme Bingo!</th>
           </tr>
         </thead>
-          {numOfColumns === 3 ?
+        <tbody>
+          {props.memes.map(memeObj => {
+            return <BingoSquare meme={memeObj} newMeme={props.newMeme} />
+          })}
+        </tbody>
+          {/* {numOfColumns === 3 ?
             <tbody>
               <tr>
                 <td>
@@ -112,7 +115,7 @@ export const BingoCard = props => {
                 </td>
               </tr>
             </tbody>
-            : null}
+            : null} */}
       </table>
     </div>
   )
