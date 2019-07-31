@@ -6,7 +6,7 @@ const proxy = require('html2canvas-proxy');
 const bodyParser = require('body-parser');
 const db = require('../database/index');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const seedFunctions = require('../database/helperFunctions');
 
 app.use(cors());

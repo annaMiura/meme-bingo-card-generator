@@ -20,7 +20,8 @@
   },
   "scripts": {
     "start": "nodemon --exec babel-node server/index.js",
-    "build": "react-scripts build",
+    "dev": "react-scripts start",
+    "build": "babel src --out-dir build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "node-server": "nodemon server/index.js localhost 3000",
@@ -35,6 +36,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "proxy": "http://localhost:3001",
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
