@@ -306,10 +306,7 @@ class App extends Component {
   }
 
   render() {
-<<<<<<< HEAD
-=======
     console.log(this.state);
->>>>>>> 492cf689e6a1daf03d338a7511aad4767f129f14
     const fetchedMemes = this.state.usedMemes[this.state.currentMemeCategory];
     const memesToUse = fetchedMemes
       ? fetchedMemes
@@ -370,7 +367,6 @@ class App extends Component {
                   <option value="4x4">4x4</option>
                 </select>
               </span>
-<<<<<<< HEAD
             </div>
 
             <div style={{ paddingBottom: '15px' }}>
@@ -380,17 +376,6 @@ class App extends Component {
                   : 'Show Sample Bingo Card'}
               </button>
             </div>
-=======
-            </div>
-
-            <div style={{ paddingBottom: '15px' }}>
-              <button onClick={this.getMemes}>
-                {this.state.displayBingoCard
-                  ? 'Update Sample Bingo Card'
-                  : 'Show Sample Bingo Card'}
-              </button>
-            </div>
->>>>>>> 492cf689e6a1daf03d338a7511aad4767f129f14
             {this.state.displaySpinner ? (
               <div>
                 <img src={require('./giphy.gif')} alt="loading" />{' '}
