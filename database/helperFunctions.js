@@ -35,7 +35,6 @@ const grabData = async (subRedditString, num) => {
 const dataFormatter = arrayOfObjects => {
     return arrayOfObjects.map(obj => {
         const ratio = obj.width / obj.height;
-        console.log('this is the ratio 💯', ratio);
         if (ratio >= 0.8 && ratio <= 1.2) {
             return obj = {
                 id: obj.id,
