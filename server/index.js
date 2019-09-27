@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/', proxy());
 
 app.get('/', function(req, res) {
+  console.log('wtf is happening... dirname: ', __dirname, 'path');
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
