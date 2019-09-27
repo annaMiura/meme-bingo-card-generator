@@ -11,7 +11,7 @@ const seedFunctions = require('../database/helperFunctions');
 console.log('TEST', port);
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/', proxy());
 
