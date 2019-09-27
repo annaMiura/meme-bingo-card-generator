@@ -11,10 +11,13 @@ const seedFunctions = require('../database/helperFunctions');
 console.log('TEST', port);
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/', proxy());
 
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+});
 
 app.get('/programmerHumor', (req, res) => {
   return db.grabMemes('programmerMemesModel')
