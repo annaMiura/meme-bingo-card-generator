@@ -2,19 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-// const proxy = require('html2canvas-proxy');
 const bodyParser = require('body-parser');
 const db = require('../database/index');
 const app = express();
 const port = process.env.PORT || 3001;
 const seedFunctions = require('../database/helperFunctions');
-console.log('TEST', port);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use('/', proxy());
-console.log('wtf is happening... ', path.join(__dirname, '/../build', 'index.html'));
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/../build', 'index.html'));
