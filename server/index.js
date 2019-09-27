@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/', proxy());
+app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/programmerHumor', (req, res) => {
   return db.grabMemes('programmerMemesModel')
