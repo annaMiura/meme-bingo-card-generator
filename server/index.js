@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', function(req, res) {
   console.log('wtf is happening... dirname: ', __dirname, 'path');
-  res.sendFile(path.join(__dirname, '../build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.get('/programmerHumor', (req, res) => {
