@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const proxy = require('html2canvas-proxy');
+// const proxy = require('html2canvas-proxy');
 const bodyParser = require('body-parser');
 const db = require('../database/index');
 const app = express();
@@ -12,7 +12,7 @@ const seedFunctions = require('../database/helperFunctions');
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/', proxy());
+// app.use('/', proxy());
 
 app.get('/programmerHumor', (req, res) => {
   return db.grabMemes('programmerMemesModel')
